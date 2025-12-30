@@ -1,0 +1,23 @@
+http:
+  middlewares:
+    lan-only:
+      ipAllowList:
+        sourceRange:
+          - 127.0.0.1/32
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+          - 192.168.0.0/16
+    pihole-strip-admin:
+      replacePathRegex:
+        regex: "^/$"
+        replacement: "/admin"
+  routers:
+    traefik:
+      rule: "Host(`traefik.umbos.net`)"
+      entryPoints:
+        - websecure
+      service: api@internal
+      middlewares:
+        - lan-only
+      tls:
+        certResolver: cloudflare
