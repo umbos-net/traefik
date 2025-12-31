@@ -18,6 +18,8 @@ entryPoints:
         - 10.0.0.0/8
         - 172.16.0.0/12
         - 192.168.0.0/16
+  minecraft:
+    address: ":25565/tcp"
 providers:
   file:
     filename: /etc/traefik/static.yml
