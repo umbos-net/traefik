@@ -12,6 +12,24 @@ http:
         regex: "^/$"
         replacement: "/admin"
   routers:
+    freddie-herpstat:
+      rule: "Host(`lamp.freddie.umbos.net`)"
+      entrypoints:
+        - https
+      service: freddie-herpstat
+      middlewares:
+        - lan-only
+      tls:
+        certresolver: "cloudflare"
+    gateway:
+      rule: "Host(`gateway.umbos.net`)"
+      entryPoints:
+        - https
+      service: gateway
+      middlewares:
+        - lan-only
+      tls:
+        certresolver: "cloudflare"
     traefik:
       rule: "Host(`traefik.umbos.net`)"
       entryPoints:
@@ -21,17 +39,12 @@ http:
         - lan-only
       tls:
         certResolver: cloudflare
-    freddie-herpstat:
-        rule: "Host(`lamp.freddie.umbos.net`)"
-        entrypoints:
-          - https
-        service: freddie-herpstat
-        middlewares:
-          - lan-only
-        tls:
-          certresolver: "cloudflare"
   services:
     freddie-herpstat:
       loadBalancer:
         servers:
           - url: "http://192.168.50.3" 
+    gateway:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.50.1"
