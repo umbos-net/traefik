@@ -1,0 +1,23 @@
+name: traefik
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v3.6
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - "53:53/udp"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./static.yaml:/etc/traefik/static.yaml:ro
+      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certificates:/certificates
+    env_file: ./.env
+networks:
+  traefik:
+    external: true
+volumes:
+  certificates:

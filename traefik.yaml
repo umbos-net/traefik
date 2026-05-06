@@ -1,0 +1,41 @@
+api:
+  dashboard: true
+  insecure: false
+entryPoints:
+  dns:
+    address: ":53/udp"
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+          permanent: true
+  https:
+    address: ":443"
+    forwardedHeaders:
+      trustedIPs:
+        - 127.0.0.1/32
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+providers:
+  file:
+    filename: /etc/traefik/static.yaml
+    watch: true
+  docker:
+    exposedByDefault: false
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: sysadmin@umbos.net
+      storage: /certificates/acme.json
+      dnsChallenge:
+        provider: cloudflare
+  http:
+    acme:
+      email: sysadmin@umbos.net
+      storage: /certificates/acme.json
+      httpChallenge:
+        entryPoint: http
